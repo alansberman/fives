@@ -30,25 +30,31 @@ public class MainActivity extends AppCompatActivity {
     public void buttonClick(View button) {
         EditText guessBox = findViewById(R.id.word_guess);
 
-        String guess = guessBox.getText().toString();
+        String guess = guessBox.getText().toString().toLowerCase();
+    }
+
+    public void startGame(){
+
+        if (wordList==null) {
+            setUpWordList();
+        }
+        selectWord();
+
+    }
+
+    // reset wordScore
+    public void reset() {
+        wordScore = 0;
     }
 
     //Set up the word list
     public void setUpWordList(){
-        if (wordList==null)
-        {
-
-        }
 
     }
 
     //Score a word
     public void scoreWord() {
-        // reset wordScore
-        if (wordScore!=0)
-        {
-            wordScore=0;
-        }
+        reset();
         for (int c = 0; c < guess.length(); c++)
         {
             // if char in word
@@ -57,20 +63,34 @@ public class MainActivity extends AppCompatActivity {
                 wordScore++;
             }
         }
+        if (wordScore==5)
+        {
+            boolean outcome = checkWord();
+            if (outcome){
+                wonGame();
+            }
+        }
+    }
+
+    public void wonGame() {
+
     }
 
     // select a word from the word list
     public void selectWord()
     {
-        //reset wordgit 
-        if (chosenWord!=null)
-        {
-            chosenWord="";
-        }
         int wordListLength = wordList.size();
         Random randomGenerator = new Random();
         int randomPosition = randomGenerator.nextInt(wordListLength);
         chosenWord = wordList.get(randomPosition);
 
+    }
+
+    public boolean checkWord() {
+
+        if (guess.equalsIgnoreCase(chosenWord)){
+            return true;
+        }
+        return false;
     }
 }
