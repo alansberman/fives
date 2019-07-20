@@ -25,12 +25,21 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        startGame();
     }
 
     public void buttonClick(View button) {
         EditText guessBox = findViewById(R.id.word_guess);
 
-        String guess = guessBox.getText().toString().toLowerCase();
+        String entered_guess = guessBox.getText().toString().toLowerCase();
+        guess = entered_guess;
+        scoreWord();
+
+    }
+
+
+    public void addToGuesses() {
+        guesses.put(guess,wordScore);
     }
 
     public void startGame(){
@@ -63,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
                 wordScore++;
             }
         }
+        //check if won game
         if (wordScore==5)
         {
             boolean outcome = checkWord();
@@ -70,10 +80,11 @@ public class MainActivity extends AppCompatActivity {
                 wonGame();
             }
         }
+        addToGuesses();
     }
 
     public void wonGame() {
-
+        //to do
     }
 
     // select a word from the word list
