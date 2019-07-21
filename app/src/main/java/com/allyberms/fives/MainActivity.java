@@ -6,6 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,11 +34,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void buttonClick(View button) {
         EditText guessBox = findViewById(R.id.word_guess);
-
         String entered_guess = guessBox.getText().toString().toLowerCase();
         guess = entered_guess;
         scoreWord();
-
+        getGuessHistory();
     }
 
 
@@ -58,7 +61,33 @@ public class MainActivity extends AppCompatActivity {
 
     //Set up the word list
     public void setUpWordList(){
+        wordList = new ArrayList<String>();
+        try {
+            BufferedReader input = new BufferedReader(new InputStreamReader(openFileInput("../fives_words.txt")));
+            String line;
+            String word;
+            StringBuffer buffer = new StringBuffer();
+            while ((line= input.readLine())!=null) {
+                buffer.append(line);
+                word = buffer.toString();
+                wordList.add(word);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
+    public String getGuessHistory(){
+        String guessHistory="";
+
+        //iterate through guesses hashmap
+        for (Map.Entry<String,Integer> entry : guesses.entrySet()) {
+            guessHistory += entry.getKey()+" : "+entry.getValue()+"/n";
+        }
+
+        return guessHistory;
     }
 
     //Score a word
