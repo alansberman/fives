@@ -6,10 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -63,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     public void setUpWordList(){
         wordList = new ArrayList<String>();
         try {
-            BufferedReader input = new BufferedReader(new InputStreamReader(openFileInput("../fives_words.txt")));
+            BufferedReader input = new BufferedReader(new FileReader("../fives_words.txt"));
             String line;
             String word;
             StringBuffer buffer = new StringBuffer();
@@ -119,11 +116,13 @@ public class MainActivity extends AppCompatActivity {
     // select a word from the word list
     public void selectWord()
     {
-        int wordListLength = wordList.size();
-        Random randomGenerator = new Random();
-        int randomPosition = randomGenerator.nextInt(wordListLength);
-        chosenWord = wordList.get(randomPosition);
+        if (!wordList.isEmpty()) {
 
+            int wordListLength = wordList.size();
+            Random randomGenerator = new Random();
+            int randomPosition = randomGenerator.nextInt(wordListLength);
+            chosenWord = wordList.get(randomPosition);
+        }
     }
 
     public boolean checkWord() {
