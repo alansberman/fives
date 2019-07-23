@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Fives</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main">Fives</string>
     <string name="word_prompt">Enter a word</string>
     <string name="guess_text">Guess!</string>
 </resources>

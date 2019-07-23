@@ -3,9 +3,14 @@ package com.allyberms.fives;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.view.View;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 
 import java.io.*;
 import java.util.ArrayList;
@@ -18,18 +23,27 @@ public class MainActivity extends AppCompatActivity {
     private String chosenWord;
     private ArrayList<String> wordList;
     private int wordScore=0;
-    private HashMap<String,Integer> guesses;
+    private ArrayList<String> guesses;
     private String guess;
+    private GuessAdapter adapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
+        RecyclerView rvGuesses = (RecyclerView) findViewById(R.id.rvGuesses);
+        guesses = new ArrayList<String>();
+        adapter = new GuessAdapter(guesses);
+        // Attach the adapter to the recyclerview to populate items
+        rvGuesses.setAdapter(adapter);
+        // Set layout manager to position the items
+        rvGuesses.setLayoutManager(new LinearLayoutManager(this));
         setSupportActionBar(toolbar);
         startGame();
         System.out.println(chosenWord);
-        guesses = new HashMap<String,Integer>();
+
     }
 
     public void buttonClick(View button) {
@@ -38,11 +52,12 @@ public class MainActivity extends AppCompatActivity {
         guess = entered_guess;
         scoreWord(guess);
         getGuessHistory();
+        adapter.notifyDataSetChanged();
     }
 
 
-    public void addToGuesses(String guess,Integer wordScore) {
-        guesses.put(guess,wordScore);
+    public void addToGuesses(String guess) {
+        guesses.add(guess);
     }
 
     public void startGame(){
@@ -88,15 +103,20 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public ArrayList<String> getGuessHistory(){
-        ArrayList<String> guessHistory= new ArrayList<String>();
+    public void getGuessHistory(){
+
 
         //iterate through guesses hashmap
-        for (Map.Entry<String,Integer> entry : guesses.entrySet()) {
-            guessHistory.add(entry.getKey()+" : "+entry.getValue().toString());
-        }
-
-        return guessHistory;
+//        for (Map.Entry<String,Integer> entry : guesses.entrySet()) {
+//            guesses_hist.add(entry.getKey()+" : "+entry.getValue().toString());
+//        }
+//        TextView hist = findViewById(R.id.word_response);
+//
+//        String historyString = "Guess History:";
+//        for (int i=0;i<guessHistory.size();i++) {
+//            historyString+="\n"+guessHistory.get(i);
+//        }
+//        hist.setText(historyString);
     }
 
     //Score a word
@@ -119,13 +139,14 @@ public class MainActivity extends AppCompatActivity {
                 wonGame();
             }
         }
-        addToGuesses(guess,wordScore);
+        guess+=" : "+String.valueOf(wordScore);
+        addToGuesses(guess);
 
     }
 
     public void wonGame() {
         //to do
-        System.out.println("well done!");
+        Toast.makeText(this, "Well done! You win!", Toast.LENGTH_SHORT).show();
     }
 
     // select a word from the word list
